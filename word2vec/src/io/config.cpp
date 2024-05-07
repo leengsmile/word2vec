@@ -2,6 +2,9 @@
 
 namespace w2v {
 
+Config::Config()
+    : min_count(5) {}
+
 void Config::set(const std::unordered_map<std::string, std::vector<std::string> >& params) {
     this->params = params;
 
@@ -16,6 +19,12 @@ void Config::set(const std::unordered_map<std::string, std::vector<std::string> 
     }
     if (has("window")) {
         window = get_int("window");
+    }
+    if (has("min_count")) {
+        min_count = get_int("min_count");
+    }
+    if (has("verbose")) {
+        verbose = get_bool("verbose");
     }
 }
 

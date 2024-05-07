@@ -4,6 +4,8 @@ project(word2vec
 )
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -O3 -Wall -std=c++14")
+# SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -pthread -std=c++14 -funroll-loops -O3 -march=native")
+
 # https://stackoverflow.com/questions/41361631/optimize-in-cmake-by-default
 # if(NOT CMAKE_BUILD_TYPE)
 #   set(CMAKE_BUILD_TYPE Release)

@@ -1,60 +1,66 @@
 #ifndef W2V_VOCABULARY_H  
 #define W2V_VOCABULARY_H
+#include <w2v/config.h>
 #include <string>
 #include <unordered_map>
 #include <cstring>
+#include <memory>
+#include <vector>
 
 namespace w2v {
 
+using id_type = float;
+
+struct Entity {
+    std::string word;
+    int64_t count;
+};
+
 class Vocabulary {
 public:
-    // Vocabulary(const std::string& file_path): data_file(file_path) {}
-    Vocabulary();
-    struct Word {
-        std::string word;
-        int count;
-    };
-    // Vocabulary() = default;
+    static const std::string EOS;
+    static const std::string BOW;
+    static const std::string EOW;
+
+    Vocabulary(std::shared_ptr<Config> config);
 
     void learn_from_file(const std::string& file_path);
 
+    bool read_word(std::istream& in, std::string& word);
     void add_word(const std::string& word);
-    void add_word(const char* word);
+
+    void threshold(int64_t t);
+    // void add_word(const char* word);
+
+    // uint32_t hash(const std::string& w) const;
     
     // std::size_t vocab_size();
+    
 private:
-    void ReadWord(char *word, FILE *fin, char *eof) {
-    int a = 0, ch;
-    while (1) {
-        ch = fgetc_unlocked(fin);
-        if (ch == EOF) {
-        *eof = 1;
-        break;
-        }
-        if (ch == 13) continue;
-        if ((ch == ' ') || (ch == '\t') || (ch == '\n')) {
-        if (a > 0) {
-            if (ch == '\n') ungetc(ch, fin);
-            break;
-        }
-        if (ch == '\n') {
-            strcpy(word, (char *)"</s>");
-            return;
-        } else continue;
-        }
-        word[a] = ch;
-        a++;
-        if (a >= MAX_STRING - 1) a--;   // Truncate too long words
-    }
-    word[a] = 0;
-}
-private:
-    std::unordered_map<std::size_t, Word> word_table;
+    // static const int32_t MAX_VOCAB_SIZE = 30000000; 
+    static const int32_t MAX_VOCAB_SIZE = 30000000; 
+    static const int32_t MAX_LINE_SIZE = 1024;
+    
+
+    std::shared_ptr<Vocabulary> vocab_;
+    int64_t ntokens_;
+    int32_t nwords_;
+    int32_t size_;
+
+    std::vector<int32_t> word2int_;
+    std::vector<Entity> words_;
+
+
+    std::shared_ptr<Config> config_;
+
+
+    int32_t find(const std::string& word) const;
+    int32_t find(const std::string& word, uint32_t h) const;
 
     // std::size_t vocab_size;
     std::size_t train_word;
     std::size_t vocab_size;
     const int MAX_STRING = 100;
-};
-}
+};  // end of Vocabulary
+}  // end of w2v
 #endif

@@ -9,15 +9,19 @@ namespace w2v {
 struct Config {
 
 public:
-    Config() {}
-    virtual ~Config() {}
-
-    virtual void set(const std::unordered_map<std::string, std::vector<std::string> >& params);
-
     double alpha;
     std::string output;
     std::string train_file;
     int window;
+
+    int64_t min_count;
+    bool verbose;
+    
+    Config();
+    virtual ~Config() {}
+
+    virtual void set(const std::unordered_map<std::string, std::vector<std::string> >& params);
+
 private:
     std::unordered_map<std::string, std::vector<std::string> > params;
 

@@ -15,7 +15,10 @@ Application::~Application() {
 
 }
 void Application::run() {
-    vocab.learn_from_file(config.train_file);
+    vocab_ = std::make_shared<Vocabulary>(config_);
+    // std::cout << "vocab finished." << std::endl;
+    vocab_->learn_from_file(config_->train_file);
+    
     // std::hash<std::string> hash;
     // std::string str("Hello");
     // std::string str2("Hello");
@@ -47,8 +50,9 @@ void Application::load_parameters(int argc, char** argv) {
             params[pair.first] = pair.second[0];
         }
     }
-    config.set(all_params);
-    // std::cout << config << std::endl;
+    config_ = std::make_shared<Config>();
+    // std::cout << "Finished config" << std::endl;
+    config_->set(all_params);
 }
 
 }

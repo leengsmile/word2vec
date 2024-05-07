@@ -563,6 +563,7 @@ void TrainModel() {
   if (read_vocab_file[0] != 0) ReadVocab(); else LearnVocabFromTrainFile();
   if (save_vocab_file[0] != 0) SaveVocab();
   if (output_file[0] == 0) return;
+  return;
   InitNet();
   if (negative > 0) InitUnigramTable();
   start = clock();

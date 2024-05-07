@@ -18,8 +18,8 @@ private:
     void load_parameters(int argc, char** argv);
 
 private:
-    Config config;
-    Vocabulary vocab;
+    std::shared_ptr<Config> config_;
+    std::shared_ptr<Vocabulary> vocab_;
 };
 
 }  // end of name space w2v

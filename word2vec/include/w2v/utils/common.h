@@ -103,18 +103,20 @@ inline static bool starts_with(const std::string& str, char delimiter) {
     return str.rfind(delimiter, 0) == 0;
 }
 
-inline std::size_t hash(const std::string& str) {
-    const static std::hash<std::string> h;
-    return h(str);
+/* ! \brief fnv-1a hash */
+inline int32_t hash(const std::string& str) {
+    uint32_t h = 2166136261;
+    for (const uint8_t&ch: str) {
+        h = h ^ uint32_t(ch);
+        h = h * 16777619;
+    }
+    // for (size_t i = 0; i < str.size(); ++i) {
+    //     h = h ^ uint32_t(uint8_t(str[i]));
+    //     h = h * 16777619;
+    // }
+    return h;
 }
 
-inline std::size_t hash(const char* c_str) {
-//   unsigned long long a, hash = 0;
-  std::size_t h = 0;
-  for (size_t a = 0; a < strlen(c_str); a++) h = h * 257 + c_str[a];
-  // hash = hash % vocab_hash_size;
-  return h;
-}
 }  // end of common namespace
 }  // endo of w2v namespace
 
