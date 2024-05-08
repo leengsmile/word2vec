@@ -107,8 +107,8 @@ inline static bool starts_with(const std::string& str, char delimiter) {
 inline int32_t hash(const std::string& str) {
     uint32_t h = 2166136261;
     for (const uint8_t&ch: str) {
-        h = h ^ uint32_t(ch);
-        h = h * 16777619;
+        h ^= uint32_t(ch);
+        h *= 16777619;
     }
     // for (size_t i = 0; i < str.size(); ++i) {
     //     h = h ^ uint32_t(uint8_t(str[i]));

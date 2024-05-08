@@ -86,10 +86,6 @@ void Vocabulary::add_word(const std::string& w) {
     int32_t h = find(w);
     if (word2int_[h] == -1) {
         Entity e {w, 1};
-        // e.word = w;
-        // e.count = 1;
-        // words_.push_back(std::move(e));
-        // words_.push_back(e);
         words_.emplace_back(std::move(e));
         word2int_[h] = size_++;
     } else {
@@ -98,8 +94,9 @@ void Vocabulary::add_word(const std::string& w) {
 }
 
 void Vocabulary::threshold(int64_t t) {
+    // std::cout << "\rthreshold t = " << t << ", size = " << size_ << ", ntokens = " << ntokens_ << std::endl;
     std::sort(words_.begin(), words_.end(), 
-              [](const Entity& e1, const Entity& e2) {return e2.count > e1.count;});
+              [](const Entity& e1, const Entity& e2) {return e1.count > e2.count;});
     words_.erase(
         std::remove_if(
             words_.begin(), 

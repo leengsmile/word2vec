@@ -9,8 +9,6 @@
 
 namespace w2v {
 
-using id_type = float;
-
 struct Entity {
     std::string word;
     int64_t count;

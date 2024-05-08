@@ -16,6 +16,9 @@ public:
 
     int64_t min_count;
     bool verbose;
+
+    double t;
+    int dim;
     
     Config();
     virtual ~Config() {}

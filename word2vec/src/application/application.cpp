@@ -14,16 +14,10 @@ Application::Application(int argc, char** argv) {
 Application::~Application() {
 
 }
+
 void Application::run() {
     vocab_ = std::make_shared<Vocabulary>(config_);
-    // std::cout << "vocab finished." << std::endl;
     vocab_->learn_from_file(config_->train_file);
-    
-    // std::hash<std::string> hash;
-    // std::string str("Hello");
-    // std::string str2("Hello");
-    // std::cout << "hash(" << str << "):" << hash(str) << std::endl;
-    // std::cout << "hash(" << str2 << "):" << hash(str2) << std::endl;
 }
 
 void Application::load_parameters(int argc, char** argv) {
@@ -50,8 +44,8 @@ void Application::load_parameters(int argc, char** argv) {
             params[pair.first] = pair.second[0];
         }
     }
-    config_ = std::make_shared<Config>();
-    // std::cout << "Finished config" << std::endl;
+    // config_ = std::make_shared<Config>();
+    config_.reset(new Config());
     config_->set(all_params);
 }
 
