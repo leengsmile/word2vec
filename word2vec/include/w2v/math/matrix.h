@@ -13,7 +13,9 @@ class Matrix {
 public:
     Matrix();
     Matrix(int64_t m, int64_t n);
-
+    Matrix(const Matrix&) = default;
+    Matrix& operator=(const Matrix&) = delete;
+    
 private:
     std::vector<real> data_;
     int64_t m_;
