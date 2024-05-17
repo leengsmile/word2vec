@@ -18,6 +18,12 @@ Application::~Application() {
 void Application::run() {
     vocab_ = std::make_shared<Vocabulary>(config_);
     vocab_->learn_from_file(config_->train_file);
+
+    input_ = std::make_shared<Matrix>(vocab_->nwords(), config_->dim);
+    input_->uniform(1.0 / config_->dim);
+
+    output_ = std::make_shared<Matrix>(vocab_->nwords(), config_->dim);
+    output_->zero();
 }
 
 void Application::load_parameters(int argc, char** argv) {

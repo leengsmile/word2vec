@@ -16,6 +16,18 @@ public:
     Matrix(const Matrix&) = default;
     Matrix& operator=(const Matrix&) = delete;
     
+    inline int64_t rows() const {
+        return m_;
+    }
+
+    inline int64_t cols() const {
+        return n_;
+    }
+
+    void zero();
+
+    void uniform(real a = 0.1);
+
 private:
     std::vector<real> data_;
     int64_t m_;

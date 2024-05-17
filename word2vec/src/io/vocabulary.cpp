@@ -118,9 +118,9 @@ void Vocabulary::threshold(int64_t t) {
     }
 }
 
-
-
-
+inline int32_t Vocabulary::nwords() const {
+    return nwords_;
+}
 
 int32_t Vocabulary::find(const std::string& word) const {
     return find(word, common::hash(word));
