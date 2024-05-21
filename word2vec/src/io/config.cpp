@@ -5,7 +5,10 @@ namespace w2v {
 Config::Config()
     : min_count(5), 
       t(1e-4),
-      dim(100) {}
+      dim(100),
+      num_threads(6),
+      epoch(5) {
+      }
 
 void Config::set(const std::unordered_map<std::string, std::vector<std::string> >& params) {
     this->params = params;
@@ -33,6 +36,9 @@ void Config::set(const std::unordered_map<std::string, std::vector<std::string> 
     }
     if (has("dim")) {
         dim = get_int("dim");
+    }
+    if (has("num_threads")) {
+        num_threads = get_int("num_threads");
     }
 }
 

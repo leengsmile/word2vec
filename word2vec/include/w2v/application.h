@@ -3,6 +3,9 @@
 #include <w2v/config.h>
 #include <w2v/vocabulary.h>
 #include <w2v/math/matrix.h>
+
+#include <atomic>
+
 namespace w2v {
 
 class Application {
@@ -16,13 +19,16 @@ public:
 
 private:
     void load_parameters(int argc, char** argv);
+    void train_thread(int32_t thread_id);
 
 private:
     std::shared_ptr<Config> config_;
     std::shared_ptr<Vocabulary> vocab_;
 
     std::shared_ptr<Matrix> input_;
-    std::shared_ptr<Matrix> ouput_;
+    std::shared_ptr<Matrix> output_;
+
+    std::atomic<int64_t> total_count_;
 };
 
 }  // end of name space w2v

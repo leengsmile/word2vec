@@ -1,9 +1,11 @@
 #include <w2v/application.h>
 #include <w2v/config.h>
 #include <w2v/utils/common.h>
+#include <w2v/utils/stream.h>
 
 #include <iostream>
 #include <fstream>
+#include <thread>
 
 namespace w2v {
 
@@ -24,6 +26,28 @@ void Application::run() {
 
     output_ = std::make_shared<Matrix>(vocab_->nwords(), config_->dim);
     output_->zero();
+
+    std::vector<std::thread> threads;
+    for (int32_t i = 0; i < config_->num_threads; i++) {
+        threads.push_back(std::thread(
+            [=](){ train_thread(i); }
+        ));
+    }
+
+    const int64_t ntokens = vocab_->ntokens();
+    int64_t local_tokens = 0;
+    
+    while (total_count_ < config_->epoch * ntokens) {
+        std::this_thread::sleep_for(std::chrono::microseconds(100));
+        if (config_->verbose) {
+            real progress = real(total_count_) / (config_->epoch * ntokens);
+        }
+    }
+
+    for (int32_t i = 0; i < config_->num_threads; i++) {
+        threads[i].join();
+    }
+
 }
 
 void Application::load_parameters(int argc, char** argv) {
@@ -53,6 +77,11 @@ void Application::load_parameters(int argc, char** argv) {
     // config_ = std::make_shared<Config>();
     config_.reset(new Config());
     config_->set(all_params);
+}
+
+void Application::train_thread(int32_t thread_id) {
+    std::ifstream in(config_->train_file);
+    common::seek(in, thread_id * common::size(in) / config_->num_threads);
 }
 
 }

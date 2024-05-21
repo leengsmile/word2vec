@@ -15,11 +15,11 @@ void Matrix::zero() {
     std::fill(data_.begin(), data_.end(), 0.);
 }
 
-void Matrix::uniform(real a = 0.1) {
-    std::minstd_rand rng();
-    std::uniform_real_distribution<real> uniform(-a, a);
-    auto gen = [&uniform]() { return uniform(rng); };
-    std::generate(data_.begin(), data_.end(), gen);
+void Matrix::uniform(real a) {
+    // std::minstd_rand rng();
+    // std::uniform_real_distribution<real> uniform(-a, a);
+    // auto gen = [&uniform]() { return uniform(rng); };
+    // std::generate(data_.begin(), data_.end(), gen);
 }
 
 }

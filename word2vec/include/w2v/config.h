@@ -19,7 +19,10 @@ public:
 
     double t;
     int dim;
-    
+
+    int num_threads;
+    int epoch;
+        
     Config();
     virtual ~Config() {}
 

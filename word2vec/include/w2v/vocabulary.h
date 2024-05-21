@@ -30,6 +30,8 @@ public:
     void threshold(int64_t t);
 
     int32_t nwords() const;
+
+    int64_t ntokens() const;
     // void add_word(const char* word);
 
     // uint32_t hash(const std::string& w) const;

@@ -122,6 +122,10 @@ inline int32_t Vocabulary::nwords() const {
     return nwords_;
 }
 
+inline int64_t Vocabulary::ntokens() const {
+    return ntokens_;
+}
+
 int32_t Vocabulary::find(const std::string& word) const {
     return find(word, common::hash(word));
 }

@@ -4,6 +4,7 @@
 #include <w2v/types.h>
 #include <cstdint>
 #include <vector>
+#include <ostream>
 
 namespace w2v {
 

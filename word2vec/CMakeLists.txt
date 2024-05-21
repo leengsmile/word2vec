@@ -20,7 +20,9 @@ include_directories(${W2V_HEADER_DIR})
 
 file(GLOB SOURCES
   src/application/*.cpp
+  src/common/*.cpp
   src/io/*.cpp
+  src/math/*.cpp
 )
 
 add_executable(
