@@ -118,11 +118,11 @@ void Vocabulary::threshold(int64_t t) {
     }
 }
 
-inline int32_t Vocabulary::nwords() const {
+int32_t Vocabulary::nwords() const {
     return nwords_;
 }
 
-inline int64_t Vocabulary::ntokens() const {
+int64_t Vocabulary::ntokens() const {
     return ntokens_;
 }
 

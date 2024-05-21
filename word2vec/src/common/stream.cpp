@@ -1,4 +1,5 @@
 #include <w2v/utils/stream.h>
+#include <ios>
 
 namespace w2v {
 namespace common {
@@ -8,7 +9,7 @@ int64_t size(std::ifstream& ifs) {
     return ifs.tellg();
 }
 
-inline void seek(std::ifstream&ifs, int64_t pos) {
+void seek(std::ifstream& ifs, int64_t pos) {
     ifs.clear();
     ifs.seekg(std::streampos(pos));
 }
