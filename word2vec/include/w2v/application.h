@@ -1,8 +1,9 @@
 #ifndef W2V_APPLICATION_H
 #define W2V_APPLICATION_H
 #include <w2v/config.h>
-#include <w2v/vocabulary.h>
 #include <w2v/math/matrix.h>
+#include <w2v/model.h>
+#include <w2v/vocabulary.h>
 
 #include <atomic>
 
@@ -27,6 +28,8 @@ private:
 
     std::shared_ptr<Matrix> input_;
     std::shared_ptr<Matrix> output_;
+
+    std::shared_ptr<Model> model_;
 
     std::atomic<int64_t> total_count_;
 };

@@ -27,6 +27,8 @@ void Application::run() {
     output_ = std::make_shared<Matrix>(vocab_->nwords(), config_->dim);
     output_->zero();
 
+    model_ = std::make_shared<Model>(vocab_->nwords(), vocab_->nwords(), config_->dim);
+
     std::vector<std::thread> threads;
     for (int32_t i = 0; i < config_->num_threads; i++) {
         threads.push_back(std::thread(

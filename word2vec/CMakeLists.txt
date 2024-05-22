@@ -23,6 +23,7 @@ file(GLOB SOURCES
   src/common/*.cpp
   src/io/*.cpp
   src/math/*.cpp
+  src/model/*.cpp
 )
 
 add_executable(
