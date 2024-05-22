@@ -20,7 +20,9 @@ public:
 
 private:
     void load_parameters(int argc, char** argv);
+    void start();
     void train_thread(int32_t thread_id);
+
 
 private:
     std::shared_ptr<Config> config_;

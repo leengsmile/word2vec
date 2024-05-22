@@ -16,10 +16,10 @@ void Matrix::zero() {
 }
 
 void Matrix::uniform(real a) {
-    // std::minstd_rand rng();
-    // std::uniform_real_distribution<real> uniform(-a, a);
-    // auto gen = [&uniform]() { return uniform(rng); };
-    // std::generate(data_.begin(), data_.end(), gen);
+    std::minstd_rand rng(1234);
+    std::uniform_real_distribution<> uniform(-a, a);
+    auto gen = [&uniform, &rng]() { return uniform(rng); };
+    std::generate(data_.begin(), data_.end(), gen);  //
 }
 
 }

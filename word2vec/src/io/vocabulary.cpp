@@ -139,6 +139,14 @@ int32_t Vocabulary::find(const std::string& word, uint32_t h) const {
     return id;
 }
 
+std::vector<int64_t> Vocabulary::get_counts() const {
+    std::vector<int64_t> counts;
+    for (const auto& w: words_) {
+        counts.push_back(w.count);
+    }
+    return counts;
+}
+
 
 
 }  // eno of namespace w2v

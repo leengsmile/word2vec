@@ -21,35 +21,16 @@ void Application::run() {
     vocab_ = std::make_shared<Vocabulary>(config_);
     vocab_->learn_from_file(config_->train_file);
 
-    input_ = std::make_shared<Matrix>(vocab_->nwords(), config_->dim);
-    input_->uniform(1.0 / config_->dim);
+    // input_ = std::make_shared<Matrix>(vocab_->nwords(), config_->dim);
+    // input_->uniform(1.0 / config_->dim);
 
-    output_ = std::make_shared<Matrix>(vocab_->nwords(), config_->dim);
-    output_->zero();
+    // output_ = std::make_shared<Matrix>(vocab_->nwords(), config_->dim);
+    // output_->zero();
 
     model_ = std::make_shared<Model>(vocab_->nwords(), vocab_->nwords(), config_->dim);
 
-    std::vector<std::thread> threads;
-    for (int32_t i = 0; i < config_->num_threads; i++) {
-        threads.push_back(std::thread(
-            [=](){ train_thread(i); }
-        ));
-    }
-
-    const int64_t ntokens = vocab_->ntokens();
-    int64_t local_tokens = 0;
+    start();
     
-    while (total_count_ < config_->epoch * ntokens) {
-        std::this_thread::sleep_for(std::chrono::microseconds(100));
-        if (config_->verbose) {
-            real progress = real(total_count_) / (config_->epoch * ntokens);
-        }
-    }
-
-    for (int32_t i = 0; i < config_->num_threads; i++) {
-        threads[i].join();
-    }
-
 }
 
 void Application::load_parameters(int argc, char** argv) {
@@ -81,9 +62,36 @@ void Application::load_parameters(int argc, char** argv) {
     config_->set(all_params);
 }
 
+void Application::start() {
+    std::vector<std::thread> threads;
+    for (int32_t i = 0; i < config_->num_threads; i++) {
+        threads.push_back(std::thread(
+            [=](){ train_thread(i); }
+        ));
+    }
+
+    const int64_t ntokens = vocab_->ntokens();
+    int64_t local_tokens = 0;
+    
+    while (total_count_ < config_->epoch * ntokens) {
+        std::this_thread::sleep_for(std::chrono::microseconds(100));
+        if (config_->verbose) {
+            real progress = real(total_count_) / (config_->epoch * ntokens);
+        }
+    }
+
+    for (int32_t i = 0; i < config_->num_threads; i++) {
+        threads[i].join();
+    }
+
+}
+
 void Application::train_thread(int32_t thread_id) {
     std::ifstream in(config_->train_file);
     common::seek(in, thread_id * common::size(in) / config_->num_threads);
+
+    // initialize negative sampling table
+    model_->init(vocab_->get_counts());
 }
 
 }

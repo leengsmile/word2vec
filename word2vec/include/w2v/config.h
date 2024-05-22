@@ -6,6 +6,9 @@
 
 namespace w2v {
 
+enum class model_type: int { cbow = 1, sg };
+enum class loss_type: int { hs = 1, ns };
+
 struct Config {
 
 public:
