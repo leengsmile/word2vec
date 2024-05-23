@@ -7,7 +7,8 @@ Config::Config()
       t(1e-4),
       dim(100),
       num_threads(6),
-      epoch(5) {
+      epoch(5),
+      lr(0.05) {
       }
 
 void Config::set(const std::unordered_map<std::string, std::vector<std::string> >& params) {
@@ -39,6 +40,9 @@ void Config::set(const std::unordered_map<std::string, std::vector<std::string> 
     }
     if (has("num_threads")) {
         num_threads = get_int("num_threads");
+    }
+    if (has("lr")) {
+        lr = get_double("lr");
     }
 }
 

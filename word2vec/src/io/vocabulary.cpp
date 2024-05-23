@@ -1,6 +1,7 @@
 #include <w2v/vocabulary.h>
 #include <w2v/utils/common.h>
 
+#include <assert.h>  // assert
 #include <algorithm>
 #include <chrono>
 #include <fstream>
@@ -45,6 +46,7 @@ void Vocabulary::learn_from_file(const std::string& file_path) {
     // std::cout << "add word: " << word << ", #tokens = " << ntokens_  << ", #words " << size_ << std::endl;
 
     threshold(config_->min_count);
+    init_discard_table();
     in.close();
     if (config_->verbose) {
         std::cerr << "\rWords in train file:  " << ntokens_ << std::endl;
@@ -147,6 +149,59 @@ std::vector<int64_t> Vocabulary::get_counts() const {
     return counts;
 }
 
+void Vocabulary::init_discard_table() {
+    assert(size_ == nwords_);
+    pdiscard_.resize(size_);
+    std::transform(words_.begin(), words_.end(), pdiscard_.begin(), 
+    [this](const Entity& word) {  
+        real p = real(word.count) / real(ntokens_); 
+        return std::sqrt(config_->t / p) + config_->t / p; 
+        // return (real)s;
+        ; });
 
+    // for (size_t i = 0; i < size_; i++) {
+    //     real p = real(words_[i].count) / real(ntokens_);
+    //     pdiscard_[i] = std::sqrt(config_->t / p) + config_->t / p;
+    // }
+}
+
+void Vocabulary::reset(std::istream& in) const {
+    if (in.eof()) {
+        in.clear();
+        in.seekg(std::streampos(0));
+    }
+}
+
+int32_t Vocabulary::get_line(std::istream& in, std::vector<int32_t>& words, std::minstd_rand& rng) {
+    std::uniform_real_distribution<> uniform(0, 1);
+    std::string token;
+    int32_t ntokens;
+    
+    reset(in);
+    words.clear();
+    while (read_word(in, token)) {
+        int32_t h = find(token);
+        int32_t id = word2int_[h];
+        if (id < 0) {
+            continue;
+        }
+
+        ntokens++;
+        if (!discard(id, uniform(rng))) {
+            words.push_back(id);
+        }
+        if (ntokens >= MAX_LINE_SIZE || token == EOS) {
+            break;
+        }
+
+    }
+    return ntokens;
+}
+
+bool Vocabulary::discard(int32_t id, real rand) {
+    assert(id >= 0);
+    assert(id < ntokens_);
+    return rand > pdiscard_[id];
+}
 
 }  // eno of namespace w2v

@@ -1,11 +1,13 @@
 #ifndef W2V_VOCABULARY_H  
 #define W2V_VOCABULARY_H
 #include <w2v/config.h>
+#include <w2v/types.h>
 #include <string>
 #include <unordered_map>
 #include <cstring>
 #include <memory>
 #include <vector>
+#include <random>
 
 namespace w2v {
 
@@ -34,6 +36,9 @@ public:
     int64_t ntokens() const;
 
     std::vector<int64_t> get_counts() const;
+
+    void reset(std::istream& in) const;
+    int32_t get_line(std::istream& in, std::vector<int32_t>& words, std::minstd_rand& rng);
     // void add_word(const char* word);
 
     // uint32_t hash(const std::string& w) const;
@@ -53,18 +58,23 @@ private:
 
     std::vector<int32_t> word2int_;
     std::vector<Entity> words_;
+    std::vector<real> pdiscard_;
 
 
     std::shared_ptr<Config> config_;
-
-
-    int32_t find(const std::string& word) const;
-    int32_t find(const std::string& word, uint32_t h) const;
 
     // std::size_t vocab_size;
     std::size_t train_word;
     std::size_t vocab_size;
     const int MAX_STRING = 100;
+
+private:
+    int32_t find(const std::string& word) const;
+    int32_t find(const std::string& word, uint32_t h) const;
+    
+    void init_discard_table();
+    bool discard(int32_t id, real rand);
+
 };  // end of Vocabulary
 }  // end of w2v
 #endif

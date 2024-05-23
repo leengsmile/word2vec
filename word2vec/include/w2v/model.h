@@ -17,6 +17,8 @@ public:
     Model(int64_t n_input, int64_t n_output, int64_t dim);
 
     void init(const std::vector<int64_t>& counts);
+
+    void skipgram(real lr, const std::vector<int32_t>& line);
     
 private:
     int64_t n_input_;

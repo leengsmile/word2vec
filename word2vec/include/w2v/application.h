@@ -6,6 +6,7 @@
 #include <w2v/vocabulary.h>
 
 #include <atomic>
+#include <random>
 
 namespace w2v {
 
@@ -33,7 +34,10 @@ private:
 
     std::shared_ptr<Model> model_;
 
-    std::atomic<int64_t> total_count_;
+    std::atomic<int64_t> token_count_;
+
+  std::minstd_rand rng;
+
 };
 
 }  // end of name space w2v

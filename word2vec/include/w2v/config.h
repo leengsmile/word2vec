@@ -16,6 +16,7 @@ public:
     std::string output;
     std::string train_file;
     int window;
+    double lr;
 
     int64_t min_count;
     bool verbose;

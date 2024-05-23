@@ -9,7 +9,8 @@
 
 namespace w2v {
 
-Application::Application(int argc, char** argv) {
+Application::Application(int argc, char** argv)
+    : rng(1024) {
     load_parameters(argc, argv);
 }
 
@@ -28,6 +29,9 @@ void Application::run() {
     // output_->zero();
 
     model_ = std::make_shared<Model>(vocab_->nwords(), vocab_->nwords(), config_->dim);
+
+    // initialize negative sampling table
+    model_->init(vocab_->get_counts());
 
     start();
     
@@ -73,10 +77,10 @@ void Application::start() {
     const int64_t ntokens = vocab_->ntokens();
     int64_t local_tokens = 0;
     
-    while (total_count_ < config_->epoch * ntokens) {
+    while (token_count_ < config_->epoch * ntokens) {
         std::this_thread::sleep_for(std::chrono::microseconds(100));
         if (config_->verbose) {
-            real progress = real(total_count_) / (config_->epoch * ntokens);
+            real progress = real(token_count_) / (config_->epoch * ntokens);
         }
     }
 
@@ -90,8 +94,14 @@ void Application::train_thread(int32_t thread_id) {
     std::ifstream in(config_->train_file);
     common::seek(in, thread_id * common::size(in) / config_->num_threads);
 
-    // initialize negative sampling table
-    model_->init(vocab_->get_counts());
+    const int64_t ntokens = vocab_->ntokens();
+    int64_t local_token_count = 0;
+    std::vector<int32_t> line;
+    while (token_count_ < config_->epoch * ntokens) {
+        real progress = real(token_count_) / real(config_->epoch * ntokens);
+        real lr = config_->lr * (1 - progress);
+        local_token_count += vocab_->get_line(in, line, rng);
+    }
 }
 
 }
